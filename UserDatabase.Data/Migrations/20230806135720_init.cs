@@ -18,12 +18,17 @@ namespace UserDatabase.Data.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsMarried = table.Column<bool>(type: "bit", nullable: false),
+                    SpouseId = table.Column<int>(type: "int", nullable: true),
                     IsEdited = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Users_SpouseId",
+                        column: x => x.SpouseId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -74,6 +79,11 @@ namespace UserDatabase.Data.Migrations
                 name: "IX_PhoneNumbers_UserId",
                 table: "PhoneNumbers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_SpouseId",
+                table: "Users",
+                column: "SpouseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -87,14 +87,16 @@ namespace UserDatabase.Data.Migrations
                     b.Property<bool>("IsEdited")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsMarried")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SpouseId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SpouseId");
 
                     b.ToTable("Users");
                 });
@@ -111,6 +113,15 @@ namespace UserDatabase.Data.Migrations
                     b.HasOne("UserDatabase.Core.Models.User", null)
                         .WithMany("PhoneNumbers")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("UserDatabase.Core.Models.User", b =>
+                {
+                    b.HasOne("UserDatabase.Core.Models.User", "Spouse")
+                        .WithMany()
+                        .HasForeignKey("SpouseId");
+
+                    b.Navigation("Spouse");
                 });
 
             modelBuilder.Entity("UserDatabase.Core.Models.User", b =>
